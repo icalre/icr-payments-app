@@ -1,28 +1,34 @@
+import { useEffect } from 'react';
+import { useRouter } from 'expo-router';
+import { useAuth } from '@/stores/auth';
+import { View, ActivityIndicator } from 'react-native';
 import { Text } from '@/components/ui/text';
-import { Stack } from 'expo-router';
-import * as React from 'react';
-import {View } from 'react-native';
-import NotificationListener from '@/components/NotificationListener';
 
 export default function Screen() {
-  return (
-    <>
-      <Stack.Screen options={
-        {
-          title: 'React Native Reusables',
-          headerTransparent: true,
-          headerShadowVisible: true
+  const { isAuthenticated , isLoading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading) {
+      // Pequeño delay para asegurar que la navegación esté lista
+      const timer = setTimeout(() => {
+        if (isAuthenticated) {
+          router.replace('/(authenticated)/home');
+        } else {
+          router.replace('/(guest)/login');
         }
-      } />
-      <View className="flex-1 items-center justify-center gap-8 p-4 mt-10">
-        {/* Notification Demo Section */}
-        <View className="w-full flex-1 mt-10">
-          <Text className="text-lg font-semibold text-center mb-4">
-            Notification Listener Demo
-          </Text>
-          <NotificationListener showButton />
-        </View>
-      </View>
-    </>
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isAuthenticated, isLoading, router]);
+
+  return (
+    <View className="flex-1 items-center justify-center bg-background">
+      <ActivityIndicator size="large" color="#007AFF" />
+      <Text className="mt-4 text-muted-foreground">
+        {isLoading ? 'Verificando autenticación...' : 'Redirigiendo...'}
+      </Text>
+    </View>
   );
 }

@@ -6,7 +6,8 @@ import { ThemeProvider } from '@react-navigation/native';
 import { PortalHost } from '@rn-primitives/portal';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useColorScheme } from 'nativewind';
+import { AuthProvider } from '@/components/auth-provider';
+import { KeyboardAvoidingView, Platform } from 'react-native';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -14,13 +15,17 @@ export {
 } from 'expo-router';
 
 export default function RootLayout() {
-  const { colorScheme } = useColorScheme();
-
   return (
     <ThemeProvider value={NAV_THEME['light']}>
       <StatusBar style={'dark'} />
-      <Stack />
-      <PortalHost />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}>
+        <AuthProvider>
+          <Stack />
+        </AuthProvider>
+        <PortalHost />
+      </KeyboardAvoidingView>
     </ThemeProvider>
   );
 }

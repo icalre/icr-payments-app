@@ -75,7 +75,7 @@ export default function NotificationListener({ showButton = true }: Props) {
 
   return (
     <View>
-      <Text>Acceso a notificaciones: {enabled ? 'Habilitado' : 'Deshabilitado'}</Text>
+      <Text className="font-bold color-emerald-700 text-center">Acceso a notificaciones: {enabled ? 'Habilitado' : 'Deshabilitado'}</Text>
       {showButton && !enabled && (
         <Button
           title="Habilitar acceso"
@@ -90,18 +90,10 @@ export default function NotificationListener({ showButton = true }: Props) {
           }}
         />
       )}
-      {last && (
-        <View style={{ marginTop: 8 }}>
-          <Text>Última notificación:</Text>
-          <Text>App: {last.packageName}</Text>
-          <Text>Título: {last.title}</Text>
-          <Text>Texto: {last.text}</Text>
-        </View>
-      )}
       <View style={{ marginTop: 12 }}>
-        <Button title="Actualizar guardadas" onPress={() => getSavedNotifications().then(setSaved)} />
+        <Button title="Actualizar Notificaciones guardadas" onPress={() => getSavedNotifications().then(setSaved)} />
         <View style={{ height: 8 }} />
-        <Button title="Limpiar guardadas" onPress={async () => { await clearSavedNotifications(); setSaved([]); }} />
+        <Button title="Limpiar Notificaciones guardadas" onPress={async () => { await clearSavedNotifications(); setSaved([]); }} />
         <Text style={{ marginTop: 8 }}>Guardadas en background: {saved.length}</Text>
       </View>
       {saved.length > 0 && (
