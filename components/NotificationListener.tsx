@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, Platform, ScrollView, AppState } from 'react-native';
+import { View, Text, Button, Platform, AppState } from 'react-native';
 import Constants from 'expo-constants';
 import {
   addNotificationPostedListener,
   addNotificationRemovedListener,
   isNotificationAccessEnabled,
   openNotificationAccessSettings,
-  enableNotificationAccessFlow,
-  NotificationEvent,
-  getSavedNotifications,
-  clearSavedNotifications,
+  enableNotificationAccessFlow
 } from '@/lib/notification-listener';
 
 type Props = {
   showButton?: boolean;
 };
 
+import {usePhone} from '@/stores/phone';
+
 export default function NotificationListener({ showButton = true }: Props) {
   const [enabled, setEnabled] = useState(false);
-  const [last, setLast] = useState<NotificationEvent | null>(null);
-  const [saved, setSaved] = useState<NotificationEvent[]>([]);
+  const { refetch, setRefetch } = usePhone();
 
   const isExpoGo = Constants.appOwnership === 'expo';
 
@@ -32,8 +30,7 @@ export default function NotificationListener({ showButton = true }: Props) {
     }
 
     isNotificationAccessEnabled().then(setEnabled);
-    getSavedNotifications().then(setSaved);
-    const sub1 = addNotificationPostedListener((e) => setLast(e));
+    const sub1 = addNotificationPostedListener(() => setRefetch(refetch + 1));
     const sub2 = addNotificationRemovedListener(() => {});
 
     const appStateSub = AppState.addEventListener('change', async (state) => {
@@ -75,10 +72,10 @@ export default function NotificationListener({ showButton = true }: Props) {
 
   return (
     <View>
-      <Text className="font-bold color-emerald-700 text-center">Acceso a notificaciones: {enabled ? 'Habilitado' : 'Deshabilitado'}</Text>
+      <Text className="font-bold color-emerald-700 text-center text-xl">Servicio: {enabled ? 'Habilitado' : 'Deshabilitado'}</Text>
       {showButton && !enabled && (
         <Button
-          title="Habilitar acceso"
+          title="Habilitar Servicio de Notificaciones"
           onPress={async () => {
             const finalEnabled = await enableNotificationAccessFlow();
             if (!finalEnabled) {
@@ -89,23 +86,6 @@ export default function NotificationListener({ showButton = true }: Props) {
             setEnabled(isEnabled);
           }}
         />
-      )}
-      <View style={{ marginTop: 12 }}>
-        <Button title="Actualizar Notificaciones guardadas" onPress={() => getSavedNotifications().then(setSaved)} />
-        <View style={{ height: 8 }} />
-        <Button title="Limpiar Notificaciones guardadas" onPress={async () => { await clearSavedNotifications(); setSaved([]); }} />
-        <Text style={{ marginTop: 8 }}>Guardadas en background: {saved.length}</Text>
-      </View>
-      {saved.length > 0 && (
-        <ScrollView style={{ maxHeight: 200, marginTop: 8 }}>
-          {saved.slice(-5).reverse().map((n, idx) => (
-            <View key={idx} style={{ marginBottom: 6 }}>
-              <Text>{new Date(n.postTime || 0).toLocaleString()} - {n.packageName}</Text>
-              <Text>{n.title}</Text>
-              <Text>{n.text}</Text>
-            </View>
-          ))}
-        </ScrollView>
       )}
     </View>
   );
