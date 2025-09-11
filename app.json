@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "icr-payments",
-    "slug": "icr-payments",
+    "name": "ICR Check",
+    "slug": "icr-check",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "icr-payments",
+    "scheme": "icr-check",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
@@ -18,7 +18,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.icalre.icrpayments"
+      "bundleIdentifier": "com.icalre.icrcheck"
     },
     "android": {
       "edgeToEdgeEnabled": true,
@@ -26,7 +26,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.icalre.icrpayments"
+      "package": "com.icalre.icrcheck"
     },
     "web": {
       "bundler": "metro",
@@ -38,7 +38,7 @@
       [
         "./plugins/with-notification-listener",
         {
-          "serviceLabel": "ICR Payments"
+          "serviceLabel": "ICR CHECK"
         }
       ],
       [
