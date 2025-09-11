@@ -43,3 +43,5 @@ ios
 android
 .env
 .idea
+
+service-key.json
