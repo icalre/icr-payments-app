@@ -14,7 +14,7 @@ AppRegistry.registerHeadlessTask('NotificationEvent', () => async (data: any) =>
     const auth = useAuth.getState();
     const phone = usePhone.getState();
 
-    if (data.packageName === 'com.bcp.innovacxion.yapeapp') {
+    if (data.packageName === 'com.bcp.innovacxion.yapeapp' && data._event == 'NotificationPosted' ) {
       let message_split = data.text.split(':');
       const message_data = {
         message: data.text,
@@ -29,7 +29,7 @@ AppRegistry.registerHeadlessTask('NotificationEvent', () => async (data: any) =>
       await messagesService.sendMessage(message_data);
     }
 
-    if (data?.text.toLowerCase().includes('plineado')) {
+    if (data?.text.toLowerCase().includes('plineado') && data._event == 'NotificationPosted') {
       const match = data.text.match(/S\/\s*(\d+(?:\.\d{2})?)/);
       const amount = match ? parseFloat(match[1]) : 0;
       const message_data = {
