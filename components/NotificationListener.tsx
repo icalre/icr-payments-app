@@ -31,7 +31,6 @@ export default function NotificationListener({ showButton = true }: Props) {
 
     isNotificationAccessEnabled().then(setEnabled);
     const sub1 = addNotificationPostedListener(() => setRefetch(refetch + 1));
-    const sub2 = addNotificationRemovedListener(() => {});
 
     const appStateSub = AppState.addEventListener('change', async (state) => {
       if (state === 'active') {
@@ -43,7 +42,6 @@ export default function NotificationListener({ showButton = true }: Props) {
 
     return () => {
       sub1.remove();
-      sub2.remove();
       appStateSub.remove();
     };
   }, []);
